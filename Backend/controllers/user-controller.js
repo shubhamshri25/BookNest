@@ -80,9 +80,44 @@ const loginUser = async (req, res) => {
   }
 };
 
+// getting the user info by id
+const getUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findOne({ _id: id }).select("-password");
 
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error " });
+  }
+};
+
+// update address
+const updateAddress = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { address } = req.body;
+
+    const user = await User.findByIdAndUpdate(id, { $set: { address } });
+
+    if (!user) {
+      return res.status(400).json({ message: "User does not exist" });
+    }
+
+    res.status(200).json({ message: "Address updated successfully" });
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports = {
   registerUser,
   loginUser,
+  getUser,
+  updateAddress,
 };
