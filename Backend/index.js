@@ -10,9 +10,11 @@ app.use(express.json());
 
 // importing routes
 const userRoutes = require("./routes/user-routes");
+const adminRoutes = require("./routes/admin-routes");
 
 // using the routes
 app.use("/api/user", userRoutes);
+app.use("/api/admin/user", adminRoutes);
 
 app.get("/", (req, res) => res.send("Hello from backend"));
 

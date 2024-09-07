@@ -9,18 +9,18 @@ const authMiddleware = async (req, res, next) => {
 
     if (!token) {
       return res
-        .staus(400)
+        .status(401)
         .json({ message: "No token provided, authorization denied" });
     }
 
-    // decoding the token 
+    // decoding the token
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    // getting user based on the decodedToken 
+    // getting user based on the decodedToken
     const user = await User.findById(decodedToken._id).select("-password");
 
     if (!user) {
-      return res.staus(400).json({ message: "User not found" });
+      return res.status(400).json({ message: "User not found" });
     }
 
     req.user = user;
