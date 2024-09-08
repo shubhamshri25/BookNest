@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    favouriteBook: [
+    favouriteBooks: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Book",
@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
     cart: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Cart",
+        ref: "Book",
       },
     ],
     order: [

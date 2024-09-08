@@ -1,4 +1,5 @@
 const User = require("../models/user-model");
+const Book = require("../models/book-model");
 
 // registering user
 const registerUser = async (req, res) => {
@@ -115,9 +116,161 @@ const updateAddress = async (req, res) => {
   }
 };
 
+// adding book to favourite
+const addBookToFavourite = async (req, res) => {
+  try {
+    const bookId = req.params.bookId;
+    const userId = req.user._id; // Using the user ID from the authMiddleware
+
+    // checking if book is present
+    const book = await Book.findById(bookId);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found " });
+    }
+
+    // checking if user is present
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found " });
+    }
+
+    // checking if the book is already in favourite
+    if (user.favouriteBooks.includes(bookId)) {
+      return res.status(400).json({ message: "Book already in favorites" });
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $addToSet: { favouriteBooks: bookId },
+    });
+
+    res.status(200).json({ message: "Book added to favourite" });
+  } catch (error) {
+    console.error("Error adding book to favorites:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// deleting book from favourite
+const deleteBookFromFavourite = async (req, res) => {
+  try {
+    const bookId = req.params.bookId;
+    const userId = req.user._id; // Using the user ID from the authMiddleware
+
+    // checking if book is present
+    const book = await Book.findById(bookId);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found " });
+    }
+
+    // checking if user is present
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found " });
+    }
+
+    // checking if the book is already in favourite
+    if (!user.favouriteBooks.includes(bookId)) {
+      return res.status(400).json({ message: "Book is not in favorites" });
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { favouriteBooks: bookId },
+    });
+
+    res.status(200).json({ message: "Book removed from favourite" });
+  } catch (error) {
+    console.error("Error deleting book from favorites:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// getting all the favourite book of the user
+const getAllFavourite = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // checking if user is present
+    const user = await User.findById(userId).populate("favouriteBooks");
+    if (!user) {
+      return res.status(404).json({ message: "User not found " });
+    }
+
+    if (user.favouriteBooks.length === 0) {
+      return res.status(404).json({ message: "No favourite books found" });
+    }
+
+    res.status(200).json({ favouriteBooks: user.favouriteBooks });
+  } catch (error) {
+    console.error("Error retrieving favourite books:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// adding the book to cart
+const addToCart = async (req, res) => {
+
+  try {
+    const bookId = req.params.bookId;
+    const userId = req.user._id; // Using the user ID from the authMiddleware
+
+    // checking if book is present
+    const book = await Book.findById(bookId);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found " });
+    }
+
+    // checking if user is present
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found " });
+    }
+
+    // checking if the book is already in favourite
+    if (user.cart.includes(bookId)) {
+      return res.status(400).json({ message: "Book already in cart" });
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $addToSet: { cart: bookId },
+    });
+
+    res.status(200).json({ message: "Book added to cart" });
+  } catch (error) {
+    console.error("Error adding book to cart:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getAllBooksFromCart = async(req,res)=>{
+  try {
+    const userId = req.user._id;
+
+    // checking if user is present
+    const user = await User.findById(userId).populate("cart");
+    if (!user) {
+      return res.status(404).json({ message: "User not found " });
+    }
+
+    if (user.cart.length === 0) {
+      return res.status(404).json({ message: "Cart is empty" });
+    }
+
+    res.status(200).json({ cart: user.cart });
+  } catch (error) {
+    console.error("Error retrieving books from cart:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+
+}
+
 module.exports = {
   registerUser,
   loginUser,
   getUser,
   updateAddress,
+  addBookToFavourite,
+  deleteBookFromFavourite,
+  getAllFavourite,
+  addToCart,
+  getAllBooksFromCart
 };

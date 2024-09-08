@@ -30,4 +30,22 @@ const recentBooks = async (req, res) => {
   }
 };
 
-module.exports = { allBooks, recentBooks };
+// get book by id
+const bookById = async (req, res) => {
+  try {
+    const bookId = req.params.id;
+
+    const book = await Book.findById(bookId);
+
+    if (!book) {
+      return res.status(404).json({ message: "Book not found " });
+    }
+
+    res.status(200).json({ book });
+  } catch (error) {
+    console.error("Error fetching book by ID:", error);
+    res.status(400).json({ message: "No books found" });
+  }
+};
+
+module.exports = { allBooks, recentBooks, bookById };
