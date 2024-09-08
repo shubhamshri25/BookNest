@@ -1,5 +1,6 @@
 const User = require("../models/user-model");
 const Book = require("../models/book-model");
+const Order = require("../models/order-model");
 
 // registering user
 const registerUser = async (req, res) => {
@@ -208,7 +209,6 @@ const getAllFavourite = async (req, res) => {
 
 // adding the book to cart
 const addToCart = async (req, res) => {
-
   try {
     const bookId = req.params.bookId;
     const userId = req.user._id; // Using the user ID from the authMiddleware
@@ -241,7 +241,8 @@ const addToCart = async (req, res) => {
   }
 };
 
-const getAllBooksFromCart = async(req,res)=>{
+// get all the books from cart
+const getAllBooksFromCart = async (req, res) => {
   try {
     const userId = req.user._id;
 
@@ -255,13 +256,117 @@ const getAllBooksFromCart = async(req,res)=>{
       return res.status(404).json({ message: "Cart is empty" });
     }
 
-    res.status(200).json({ cart: user.cart });
+    const cart = user.cart.reverse(); // for getting the recently added book on top
+
+    res.status(200).json({ cart });
   } catch (error) {
     console.error("Error retrieving books from cart:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
 
-}
+// remove the book from cart
+const removeFromcart = async (req, res) => {
+  try {
+    const bookId = req.params.bookId;
+    const userId = req.user._id; // Using the user ID from the authMiddleware
+
+    // checking if book is present
+    const book = await Book.findById(bookId);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found " });
+    }
+
+    // checking if user is present
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found " });
+    }
+
+    // checking if the book is already in favourite
+    if (!user.cart.includes(bookId)) {
+      return res.status(400).json({ message: "Book is not in cart" });
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { cart: bookId },
+    });
+
+    res.status(200).json({ message: "Book removed from cart" });
+  } catch (error) {
+    console.error("Error deleting book from cart:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// place order from cart
+const placeOrder = async (req, res) => {
+  try {
+    const userId = req.user._id; // Using the user ID from the authMiddleware
+
+    const user = await User.findById(userId).populate("cart");
+
+    if (!user || !user.cart || user.cart.length === 0) {
+      return res.status(404).json({ message: "Cart is empty" });
+    }
+
+    const orders = [];
+
+    for (let book of user.cart) {
+      try {
+        const order = await Order.create({
+          user: userId,
+          book: book._id, // Assuming the cart contains book documents after populate
+        });
+
+        orders.push(order); // Collect each order in the orders array
+      } catch (error) {
+        console.error("Error creating order:", error);
+      }
+    }
+
+    // Update the user's orders array and clear the cart
+    await User.findByIdAndUpdate(userId, {
+      $push: { orders: { $each: orders.map((order) => order._id) } }, // Add all order IDs to the user's orders array
+      $set: { cart: [] }, // Clear the cart after placing orders
+    });
+
+    res.status(201).json({
+      message: "Order placed successfully",
+      orders,
+    });
+  } catch (error) {
+    console.error("Error placing order:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// getting the user's order history
+const orderHistory = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const user = await User.findById(userId).populate({
+      path: "orders", // Field containing order references
+      populate: {
+        path: "book",
+      },
+    });
+
+    if (!user || !user.orders || user.orders.length === 0) {
+      return res.status(404).json({ message: "No orders found" });
+    }
+
+    // fetching the most recent placed order 
+    const orderData = user.orders.reverse();
+
+   
+    res.status(200).json({ pastOrders: orderData });
+  } catch (error) {
+    console.error("Error retrieving order history:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports = {
   registerUser,
@@ -272,5 +377,8 @@ module.exports = {
   deleteBookFromFavourite,
   getAllFavourite,
   addToCart,
-  getAllBooksFromCart
+  getAllBooksFromCart,
+  removeFromcart,
+  placeOrder,
+  orderHistory,
 };
