@@ -7,8 +7,12 @@ const registerUser = async (req, res) => {
   try {
     const { username, email, password, address } = req.body;
 
-    // checking username length greater than 3
+    if (!username || !email || !password || !address) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     if (username.length < 4) {
+      // checking username length greater than 3
       return res
         .status(400)
         .json({ message: "Username length must be greater than 3 " });
@@ -41,7 +45,7 @@ const registerUser = async (req, res) => {
       address,
     });
 
-    console.log(createdUser);
+    // console.log(createdUser);
 
     res.status(201).json({
       message: "SignUp successfull",
@@ -191,7 +195,7 @@ const getAllFavourite = async (req, res) => {
     const userId = req.user._id;
 
     // checking if user is present
-    const user = await User.findById(userId).populate("favouriteBooks");
+    const user = await User.findById(userId).populate("favouriteBooks"); // used to replace the objectId with data
     if (!user) {
       return res.status(404).json({ message: "User not found " });
     }
@@ -312,6 +316,7 @@ const placeOrder = async (req, res) => {
 
     const orders = [];
 
+    // looping on all the books prensent in the cart
     for (let book of user.cart) {
       try {
         const order = await Order.create({

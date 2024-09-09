@@ -13,14 +13,19 @@ const {
 const adminMiddlware = require("../middlewares/admin-middleware");
 const authMiddleware = require("../middlewares/auth-middleware");
 
-router.get("/user", authMiddleware, adminMiddlware, allUser);
+// getting all users
+router.get("/users", authMiddleware, adminMiddlware, allUser);
 
+// getting the user by id
 router.get("/user/:id", authMiddleware, adminMiddlware, getUser);
 
+// adding the book
 router.post("/book/add-book", authMiddleware, adminMiddlware, addBook);
 
+// updating the book
 router.put("/book/update-book/:id", authMiddleware, adminMiddlware, updateBook);
 
+// deleting the book
 router.delete(
   "/book/delete-book/:id",
   authMiddleware,
@@ -28,10 +33,12 @@ router.delete(
   deleteBook
 );
 
-router.get("/all-orders", authMiddleware, adminMiddlware, getAllOrders);
+// getting all the orders placed by the user's
+router.get("/order/all-orders", authMiddleware, adminMiddlware, getAllOrders);
 
+// updating the order status
 router.put(
-  "/update-order-status/:orderId",
+  "/order/update-order-status/:orderId",
   authMiddleware,
   adminMiddlware,
   updateOrderStatus

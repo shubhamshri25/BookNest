@@ -7,10 +7,13 @@ const {
   bookById,
 } = require("../controllers/book-controller");
 
-router.get("/allBooks", allBooks);
+// getting all the books 
+router.get("/all-books", allBooks);
 
-router.get("/recentBooks", recentBooks);
+// getting 4 recently added books 
+router.get("/recent-Books", recentBooks);
 
+// getting the book by id 
 router.get("/book-by-id/:id", bookById);
 
 module.exports = router;

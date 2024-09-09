@@ -105,7 +105,6 @@ const deleteBook = async (req, res) => {
     res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
     console.error("error while deleting the book: ", error);
-
     res.status(500).json({ message: "Internal server error " });
   }
 };
