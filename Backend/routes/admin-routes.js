@@ -7,7 +7,8 @@ const {
   addBook,
   updateBook,
   deleteBook,
-  allBooks,
+  getAllOrders,
+  updateOrderStatus,
 } = require("../controllers/admin-controller");
 const adminMiddlware = require("../middlewares/admin-middleware");
 const authMiddleware = require("../middlewares/auth-middleware");
@@ -27,6 +28,13 @@ router.delete(
   deleteBook
 );
 
+router.get("/all-orders", authMiddleware, adminMiddlware, getAllOrders);
 
+router.put(
+  "/update-order-status/:orderId",
+  authMiddleware,
+  adminMiddlware,
+  updateOrderStatus
+);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const User = require("../models/user-model");
 const Book = require("../models/book-model");
+const Order = require("../models/order-model");
 
 // getting  all users
 const allUser = async (req, res) => {
@@ -102,10 +103,63 @@ const deleteBook = async (req, res) => {
     await Book.findByIdAndDelete(bookId);
 
     res.status(200).json({ message: "Book deleted successfully" });
-  } catch (error) {}
+  } catch (error) {
+    console.error("error while deleting the book: ", error);
+
+    res.status(500).json({ message: "Internal server error " });
+  }
 };
 
+// getting all the orders that are placed
+const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({})
+      .populate({ path: "book" }) // Populates the book field with book details
+      .populate({ path: "user" }) // Populates the user field with user details
+      .sort({ createdAt: -1 }); // Sorts orders by creation date in descending order
 
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ message: "No orders found" });
+    }
+
+    res.status(200).json({ message: "Orders fetched successfully", orders });
+  } catch (error) {
+    console.error("Error retrieving orders:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// update the status of the order
+const updateOrderStatus = async (req, res) => {
+  try {
+    const orderId = req.params.orderId; // Extract orderId from URL parameters
+    const { status } = req.body; // Extract status from request body
+
+    // Validate the status
+    const validStatuses = [
+      "Order placed",
+      "Out for delivery",
+      "Delivered",
+      "Cancelled",
+    ];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    // Find and update the order status
+    const order = await Order.findByIdAndUpdate(orderId, { status });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Respond with the updated order
+    res.status(200).json({ message: "Order status updated successfully" });
+  } catch (error) {
+    console.error("Cannot update the status:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports = {
   allUser,
@@ -113,4 +167,6 @@ module.exports = {
   addBook,
   updateBook,
   deleteBook,
+  getAllOrders,
+  updateOrderStatus,
 };

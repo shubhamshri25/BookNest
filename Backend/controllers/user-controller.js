@@ -357,10 +357,9 @@ const orderHistory = async (req, res) => {
       return res.status(404).json({ message: "No orders found" });
     }
 
-    // fetching the most recent placed order 
+    // fetching the most recent placed order
     const orderData = user.orders.reverse();
 
-   
     res.status(200).json({ pastOrders: orderData });
   } catch (error) {
     console.error("Error retrieving order history:", error);
