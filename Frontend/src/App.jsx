@@ -23,6 +23,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/view-book-details/:id" element={<Profile />} />
         </Routes>
         <Footer />
       </BrowserRouter>
