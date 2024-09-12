@@ -47,13 +47,13 @@ const Navbar = () => {
         <div className=" block md:flex items-center gap-4">
           <div className=" hidden md:flex gap-4">
             {navLinks.map((currEle, index) => (
-              <Link
+              <NavLink
                 key={index}
                 className=" hover:text-blue-500 transition-all duration-300"
                 to={currEle.link}
               >
                 {currEle.title}
-              </Link>
+              </NavLink>
             ))}
           </div>
 
