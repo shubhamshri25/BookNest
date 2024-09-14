@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
+import ViewBookDetails from "./components/viewbookDetails/ViewBookDetails";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/view-book-details/:id" element={<Profile />} />
+          <Route path="/view-book-details/:id" element={<ViewBookDetails />} />
         </Routes>
         <Footer />
       </BrowserRouter>

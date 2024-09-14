@@ -12,7 +12,7 @@ const AllBooks = () => {
   const getAllBooks = async () => {
     try {
       const response = await axios.get(`${api}/books/all-books`);
-      console.log(response.data);
+      // console.log(response.data);
       setBooks(response.data.books);
     } catch (error) {
       console.error("Error getting books: ", books);

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import BookCard from "../bookcard/BookCard";
 import Loader from "../loader/Loader";
 
@@ -12,12 +11,10 @@ const RecentlyAdded = () => {
   const getRecentBooks = async () => {
     try {
       const response = await axios.get(`${api}/books/recent-Books`);
-      console.log(response.data);
+      // console.log(response.data);
       setBooks(response.data.books);
-      // toast.success("Recent Books fetched successfully");
     } catch (error) {
       console.error("Error getting Recently added books: ", books);
-      // toast.error("Error fetching recent Books");
     }
   };
 
