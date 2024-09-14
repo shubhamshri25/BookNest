@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FaGripLines } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const navLinks = [
@@ -25,6 +26,13 @@ const Navbar = () => {
       link: "/profile",
     },
   ];
+
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  // console.log(isLoggedIn)
+
+  if (isLoggedIn === false) {
+    navLinks.splice(3, 2);
+  }
 
   const [mobileNav, setMobileNav] = useState("hidden");
 
