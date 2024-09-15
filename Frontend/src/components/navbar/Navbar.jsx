@@ -65,20 +65,24 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="hidden md:flex gap-4">
-            <Link
-              to="/login"
-              className="px-4 py-2 border border-blue-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300 "
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="px-4 py-2 bg-blue-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300 "
-            >
-              SignUp
-            </Link>
-          </div>
+          {isLoggedIn === false && (
+            <div className="hidden md:flex gap-4">
+              <>
+                <Link
+                  to="/login"
+                  className="px-4 py-2 border border-blue-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300 "
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 bg-blue-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300 "
+                >
+                  SignUp
+                </Link>
+              </>
+            </div>
+          )}
 
           <button
             className="hover:text-zinc-400 text-white text-2xl md:hidden block"
@@ -111,28 +115,32 @@ const Navbar = () => {
           </Link>
         ))}
 
-        <Link
-          to="/login"
-          className={`${mobileNav} px-8 mb-8 text-3xl py-2 font-semibold border text-white border-blue-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300`}
-          onClick={() =>
-            mobileNav === "hidden"
-              ? setMobileNav("block")
-              : setMobileNav("hidden")
-          }
-        >
-          Login
-        </Link>
-        <Link
-          to="/signup"
-          className={` ${mobileNav} px-8 mb-8 text-3xl py-2 font-semibold bg-blue-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300 `}
-          onClick={() =>
-            mobileNav === "hidden"
-              ? setMobileNav("block")
-              : setMobileNav("hidden")
-          }
-        >
-          SignUp
-        </Link>
+        {isLoggedIn === false && (
+          <>
+            <Link
+              to="/login"
+              className={`${mobileNav} px-8 mb-8 text-3xl py-2 font-semibold border text-white border-blue-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300`}
+              onClick={() =>
+                mobileNav === "hidden"
+                  ? setMobileNav("block")
+                  : setMobileNav("hidden")
+              }
+            >
+              Login
+            </Link>
+            <Link
+              to="/signup"
+              className={` ${mobileNav} px-8 mb-8 text-3xl py-2 font-semibold bg-blue-500 rounded hover:bg-white hover:text-zinc-800 transition-all duration-300 `}
+              onClick={() =>
+                mobileNav === "hidden"
+                  ? setMobileNav("block")
+                  : setMobileNav("hidden")
+              }
+            >
+              SignUp
+            </Link>
+          </>
+        )}
       </div>
     </>
   );

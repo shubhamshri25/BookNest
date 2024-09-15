@@ -1,8 +1,56 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    address: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const api = import.meta.env.VITE_BACKEND_API;
+
+  // handling the on signUp functionality
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (
+        formData.username === "" ||
+        formData.email === "" ||
+        formData.password === "" ||
+        formData.address === ""
+      ) {
+        toast.error("All Field are required");
+      } else {
+        const response = await axios.post(`${api}/user/register`, formData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        console.log(response.data);
+        toast.success("Sign Up successfull");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log("register ", error);
+      toast.error(error.response.data.message);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-screen bg-zinc-900">
       <div className="bg-zinc-800 p-8 rounded-lg shadow-md w-96">
@@ -10,7 +58,7 @@ const SignUp = () => {
 
         {/* {error && <p className="text-red-500 mb-4">{error}</p>} */}
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-zinc-400 mb-2">
               Username
@@ -19,8 +67,8 @@ const SignUp = () => {
               type="text"
               id="username"
               name="username"
-              // value={formData.username}
-              // onChange={handleChange}
+              value={formData.username}
+              onChange={handleChange}
               required
               className="w-full p-2 rounded bg-zinc-700 text-white"
               placeholder="Enter your username"
@@ -35,8 +83,8 @@ const SignUp = () => {
               type="email"
               id="email"
               name="email"
-              // value={formData.email}
-              // onChange={handleChange}
+              value={formData.email}
+              onChange={handleChange}
               required
               className="w-full p-2 rounded bg-zinc-700 text-white"
               placeholder="Enter your email"
@@ -51,8 +99,8 @@ const SignUp = () => {
               type="password"
               id="password"
               name="password"
-              // value={formData.password}
-              // onChange={handleChange}
+              value={formData.password}
+              onChange={handleChange}
               required
               className="w-full p-2 rounded bg-zinc-700 text-white"
               placeholder="Enter your password"
@@ -67,8 +115,8 @@ const SignUp = () => {
             <textarea
               id="address"
               name="address"
-              // value={formData.address}
-              // onChange={handleChange}
+              value={formData.address}
+              onChange={handleChange}
               required
               className="w-full p-2 rounded bg-zinc-700 text-white"
               placeholder="Enter your address"

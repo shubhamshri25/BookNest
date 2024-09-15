@@ -7,8 +7,9 @@ import axios from "axios";
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
 
-  const api = `${import.meta.env.VITE_BACKEND_API}`;
+  const api = import.meta.env.VITE_BACKEND_API;
 
+  // getting all the books 
   const getAllBooks = async () => {
     try {
       const response = await axios.get(`${api}/books/all-books`);
