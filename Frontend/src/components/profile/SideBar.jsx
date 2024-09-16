@@ -14,7 +14,7 @@ const SideBar = ({ data }) => {
         <div className="w-full mt-4 h-[1px] bg-zinc-50 hidden lg:block"></div>
       </div>
 
-      <div className=" w-full  flex-col items-center justify-center hidden lg:flex">
+      <div className=" w-full flex-col items-center justify-center hidden lg:flex">
         <Link
           to="/profile"
           className="text-zinc-100 font-semibold w-full text-center py-2 hover:bg-zinc-900 rounded transition-all duration-300"
