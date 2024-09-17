@@ -7,21 +7,18 @@ import Loader from "../components/loader/Loader";
 
 const Profile = () => {
   // const isLoggedIn = useSelector();
-
-  const headers = {
-    id: localStorage.getItem("id"),
-    authorization: `Bearer ${localStorage.getItem("token")}`,
-  };
-
   const [profile, setProfile] = useState({});
+
+  const id = localStorage.getItem("id");
+  const token = localStorage.getItem("token");
 
   const api = import.meta.env.VITE_BACKEND_API;
 
   // getting the user
   const getUser = async () => {
     try {
-      const response = await axios.get(`${api}/user/${headers.id}`, {
-        headers,
+      const response = await axios.get(`${api}/user/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       // console.log(response.data);
@@ -45,7 +42,7 @@ const Profile = () => {
       )}
       {profile && (
         <>
-          <div className=" w-full md:w-1/6 h-screen" >
+          <div className=" w-full md:w-1/6 h-auto lg:h-screen">
             <SideBar data={profile} />
           </div>
           <div className=" w-full md:w-5/6">
