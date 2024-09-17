@@ -4,6 +4,7 @@ import { Outlet, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Loader from "../components/loader/Loader";
+import MobileNav from "../components/profile/MobileNav";
 
 const Profile = () => {
   // const isLoggedIn = useSelector();
@@ -44,6 +45,7 @@ const Profile = () => {
         <>
           <div className=" w-full md:w-1/6 h-auto lg:h-screen">
             <SideBar data={profile} />
+            <MobileNav />
           </div>
           <div className=" w-full md:w-5/6">
             <Outlet />
