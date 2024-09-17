@@ -9,7 +9,7 @@ const AllBooks = () => {
 
   const api = import.meta.env.VITE_BACKEND_API;
 
-  // getting all the books 
+  // getting all the books
   const getAllBooks = async () => {
     try {
       const response = await axios.get(`${api}/books/all-books`);
@@ -29,7 +29,7 @@ const AllBooks = () => {
       <div className="bg-zinc-900 px-12 h-auto py-8 ">
         <h4 className="text-3xl text-yellow-100 text-center ">All Books</h4>
         {!books && (
-          <div className="flex items-center justify-center my-8">
+          <div className="w-full h-screen flex items-center justify-center ">
             <Loader />
           </div>
         )}

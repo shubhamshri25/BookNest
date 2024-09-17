@@ -20,7 +20,7 @@ const ViewBookDetails = () => {
 
   // console.log(isLoggedIn, role);
 
-  const api = `${import.meta.env.VITE_BACKEND_API}`;
+  const api = import.meta.env.VITE_BACKEND_API;
 
   // get book detail
   const getBookDetail = async () => {
@@ -73,7 +73,7 @@ const ViewBookDetails = () => {
       );
       toast.success(response.data.message);
     } catch (error) {
-      console.error();
+      console.error("Error getting book: ", error);
       toast.error(
         error.response?.data?.message || "Failed to add book to cart"
       );
