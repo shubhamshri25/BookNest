@@ -4,7 +4,7 @@ import Loader from "../loader/Loader";
 import { Link } from "react-router-dom";
 
 const UserOrderHistory = () => {
-  const [orderHistory, setOrderHistory] = useState();
+  const [orderHistory, setOrderHistory] = useState([]);
   const api = import.meta.env.VITE_BACKEND_API;
 
   const id = localStorage.getItem("id");

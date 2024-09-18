@@ -25,13 +25,24 @@ const Navbar = () => {
       title: "Profile",
       link: "/profile",
     },
+    {
+      title: "Admin Profile",
+      link: "/profile",
+    },
   ];
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const role = useSelector((state) => state.auth.role);
   // console.log(isLoggedIn)
 
   if (isLoggedIn === false) {
-    navLinks.splice(3, 2);
+    navLinks.splice(3, 3);
+  }
+
+  if (isLoggedIn === true && role === "admin") {
+    navLinks.splice(4, 1);
+  } else {
+    navLinks.splice(5, 1);
   }
 
   const [mobileNav, setMobileNav] = useState("hidden");
@@ -48,7 +59,7 @@ const Navbar = () => {
             alt="logo"
           />
           <Link to="/" className="font-semibold text-2xl">
-            BookNest
+            <h1 className="text-2xl font-semibold">BookNest</h1>
           </Link>
         </div>
 

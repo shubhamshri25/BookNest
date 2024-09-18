@@ -55,7 +55,7 @@ const BookCard = ({ data, favourite, setFavBooks }) => {
       <div />
       {favourite && (
         <button
-          className="bg-yellow-50 px-4 py-2 rounded border border-yellow-500 text-yellow-500 mt-4"
+          className="bg-yellow-50 px-4 py-2 rounded border border-yellow-500 text-yellow-500 hover:bg-yellow-100 mt-4"
           onClick={removeFromFavourite}
         >
           Remove from favourites
