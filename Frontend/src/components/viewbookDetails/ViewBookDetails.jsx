@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../loader/Loader";
 import axios from "axios";
 import { GrLanguage } from "react-icons/gr";
@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 
 const ViewBookDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [book, setBook] = useState("");
 
@@ -80,6 +81,43 @@ const ViewBookDetails = () => {
     }
   };
 
+  // edit book
+  const editBook = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `${api}/admin/book/update-book/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {}
+  };
+
+  // delete book
+  const deleteBook = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${api}/admin/book/delete-book/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success(response.data.message);
+      navigate("/all-books");
+      // console.log(response);
+    } catch (error) {
+      console.error("Error deleting book: ", error);
+      toast.error(error.response?.data?.message || "Failed to delete book");
+    }
+  };
+
   useEffect(() => {
     getBookDetail();
   }, [id]);
@@ -123,7 +161,10 @@ const ViewBookDetails = () => {
                     <FaEdit />
                     <span className="ms-4 lg:hidden block ">Edit</span>
                   </button>
-                  <button className="text-red-500 rounded lg:rounded-full text-4xl lg:text-3xl p-3 mt-0 lg:mt-8 bg-white flex justify-center items-center">
+                  <button
+                    className="text-red-500 rounded lg:rounded-full text-4xl lg:text-3xl p-3 mt-4 lg:mt-8 bg-white flex justify-center items-center"
+                    onClick={deleteBook}
+                  >
                     <MdOutlineDeleteOutline />
                     <span className="ms-4 lg:hidden block ">Delete book</span>
                   </button>
