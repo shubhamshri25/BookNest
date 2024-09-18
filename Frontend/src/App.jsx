@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import Favourites from "./components/profile/Favourites";
 import UserOrderHistory from "./components/profile/UserOrderHistory";
 import Settings from "./components/profile/Settings";
+import AllOrders from "./pages/AllOrders";
+import AddBook from "./pages/AddBook";
 
 function App() {
   const dispatch = useDispatch();
@@ -44,7 +46,14 @@ function App() {
         <Route path="/cart" element={<Cart />} />
 
         <Route path="/profile" element={<Profile />}>
-          <Route index element={<Favourites />} />
+          {role === "user" ? (
+            <Route index element={<Favourites />} />
+          ) : (
+            <Route index element={<AllOrders />} />
+          )}
+          {role === "admin" && (
+            <Route path="/profile/add-book" element={<AddBook />} />
+          )}
           <Route path="/profile/orderHistory" element={<UserOrderHistory />} />
           <Route path="/profile/settings" element={<Settings />} />
         </Route>
