@@ -47,16 +47,22 @@ function App() {
         <Route path="/cart" element={<Cart />} />
 
         <Route path="/profile" element={<Profile />}>
-          {role === "user" ? (
-            <Route index element={<Favourites />} />
-          ) : (
-            <Route index element={<AllOrders />} />
+          {role === "user" && (
+            <>
+              <Route index element={<Favourites />} />
+              <Route path="orderHistory" element={<UserOrderHistory />} />
+              <Route path="settings" element={<Settings />} />
+            </>
           )}
+
+          {/* Routes for Admins */}
           {role === "admin" && (
-            <Route path="/profile/add-book" element={<AddBook />} />
+            <>
+              <Route index element={<AllOrders />} />
+              <Route path="add-book" element={<AddBook />} />
+              <Route path="update-book/:id" element={<UpdateBook />} />
+            </>
           )}
-          <Route path="/profile/orderHistory" element={<UserOrderHistory />} />
-          <Route path="/profile/settings" element={<Settings />} />
         </Route>
 
         <Route path="/view-book-details/:id" element={<ViewBookDetails />} />

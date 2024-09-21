@@ -49,6 +49,7 @@ const UserOrderHistory = () => {
           </div>
         </div>
       )}
+
       {orderHistory && orderHistory.length > 0 && (
         <div className="h-[100%] p-0 md:p-4 text-zinc-100 ">
           <h1 className="text-3xl md:text-5xl font-semibold text-zinc-500 mb-8">
@@ -93,16 +94,16 @@ const UserOrderHistory = () => {
                 </Link>
               </div>
 
-              <div className="w-[45%]">
+              <div className=" w-0 hidden md:block md:w-[45%]">
                 <h1 className="">{currOrder.book.desc.slice(0, 50)} ...</h1>
               </div>
 
-              <div className="w-[9%]">
+              <div className=" w-[17%] md:w-[9%]">
                 <h1 className="">{currOrder.book.price}</h1>
               </div>
 
-              <div className="w-[16%]">
-                <h1 className="font-semibold text-green-500 ">
+              <div className=" w-[30%] md:w-[16%]">
+                <h1 className="font-semibold">
                   {currOrder.status === "Order placed" ? (
                     <div className="text-yellow-500">{currOrder.status}</div>
                   ) : currOrder.status === "Cancelled" ? (
