@@ -40,7 +40,7 @@ const Navbar = () => {
   }
 
   if (isLoggedIn === true && role === "admin") {
-    navLinks.splice(4, 1);
+    navLinks.splice(3, 1);
   } else {
     navLinks.splice(5, 1);
   }
